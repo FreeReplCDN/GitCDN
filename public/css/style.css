@@ -1,0 +1,246 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+
+/* Default styles */
+:root {
+  --background-color: white;
+  --foreground-color: black;
+  --accent-color: #00aeff;
+  --positive-color: #ffd030;
+  --negative-color: #ff6666;
+  --midground-color: #595959;
+  --mid-background-color: #ccc;
+  --ambient-glow-color: #a3a3a3;
+  --font-family: "Inter", sans-serif;
+  font-weight: 500;
+  /*AAAAAA NOT GOOD FOR HEADERS yes it isn't good, AND AAAAAHHHH!!!!!*/
+  /* all of the good fontsare in fonts.google.com */
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: rgb(10, 10, 10);
+    --foreground-color: white;
+    --midground-color: #444;
+    --mid-background-color: #222;
+    --accent-color: #005f8c;
+    --ambient-glow-color: #262626;
+  }
+  header {
+    color: var(--background-color);
+  }
+}
+body {
+  background-color: var(--background-color);
+  color: var(--foreground-color);
+  font-family: var(--font-family);
+}
+
+/* Top navbar */
+header {
+  display: inline-block;
+  width: 100%;
+  padding: 8px;
+  background-color: var(--positive-color);
+  margin: -8px;
+  font-size: 25px;
+}
+header #linksButton {
+  display: none;
+  width: 0px;
+  height: 0px;
+}
+header a {
+  display: inline-block;
+  margin: 0 10px;
+}
+.linksContainer,
+.leftLinksContainer {
+  display: inline-block; /*otherwise scrolling would remove it from view */
+  z-index: 0;
+  height: 25px; /*? What do you want to do, Ah okay*/
+  margin: 0;
+  border: none;
+  background-color: var(
+    --positive-color
+  ); /*the shade of yellow */ /* positive color?Idk, I did't name it so.*/
+  max-width: 80%;
+  padding-left: 8px;
+  padding-right: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+@media only screen and (max-width: 720px) {
+  /*When width is smaller than 720px*/
+  header a {
+    display: block;
+  }
+  header #linksButton {
+    display: inline;
+    width: 30px;
+    height: 25px;
+  }
+  .linksContainer {
+    display: none; /*otherwise scrolling would remove it from view */
+    z-index: 2;
+    right: 0;
+    top: 46px;
+    height: calc(100vh-48px);
+    margin: 0;
+    border: none;
+    background-color: var(
+      --negative-color
+    ); /* positive color?Idk, I did't name it so.*/
+    position: sticky;
+    max-width: 80%;
+    padding-left: 8px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+}
+
+/* Buttons */
+.CSSButton {
+  position: relative;
+  outline: none;
+  background-color: var(--accent-color);
+  border: none;
+  color: var(--foreground-color);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: larger;
+  cursor: pointer;
+  transition-duration: 0.5s;
+}
+.CSSButton:hover {
+  transform: translateY(-5%);
+  box-shadow: 0px 0px 8px var(--midground-color);
+  transition-duration: 0.3s;
+}
+.CSSCenteredButton {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%) translateY(0%);
+  outline: none;
+  background-color: var(--accent-color);
+  color: var(--foreground-color);
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: larger;
+  cursor: pointer;
+  transition-duration: 0.5s;
+}
+.CSSCenteredButton:hover {
+  transform: translateX(-50%) translateY(-10%);
+  box-shadow: 0px 0px 8px var(--midground-color);
+  transition-duration: 0.3s;
+}
+
+/* Containers */
+.container {
+  /* Box shadow */
+  box-shadow: 0px 0px 8px var(--ambient-glow-color);
+  /*Centering element*/
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  /*NOTE : WIDTH isn't defined here, define it in the style of the page*/
+  max-width: 80%;
+  background-color: var(--mid-background-color);
+  border-radius: 10px;
+  padding: 0px 20px 20px 20px;
+  margin-top: 5%;
+  transition-duration: 1s;
+}
+
+.container h1 {
+  /*This code is **very** tricky, don't touch to it if you don't really know what you're doing.*/
+  text-align: center;
+  background-color: var(--accent-color);
+  margin: 0;
+  position: relative;
+  display: block;
+  /*This is important*/
+  width:100%;
+  left:-20px;
+  
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-radius: 10px 10px 0 0;
+}
+.container:hover {
+  transform: scale(1.02);
+  transition-duration: 0.5s;
+}
+.container h2 {
+  text-align: center;
+}
+
+/* Footing styles */
+footer {
+  position: fixed;
+  bottom: 0px;
+  margin: 0;
+  width: 100%;
+  background-color: none;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  text-align: center;
+}
+footer a {
+  color: var(--foreground-color);
+}
+
+/* Alignment */
+.floatleft {
+  float: left;
+}
+.floatright {
+  float: right;
+}
+.center {
+  text-align: center;
+}
+
+/* Link Underlining */
+a:not(.noUnderline) {
+  /* Underline styles - details of technique here: https://nickymeuleman.netlify.app/blog/css-animated-wrapping-underline */
+  cursor: pointer;
+  background: linear-gradient(
+      to right,
+      rgba(100, 200, 200, 1),
+      rgba(100, 200, 200, 1)
+    ),
+    linear-gradient(
+      to right,
+      rgba(255, 0, 0, 1),
+      rgba(255, 0, 180, 1),
+      rgba(0, 100, 200, 1)
+    );
+  background-size: 100% 0.1em, 0 0.1em;
+  background-position: 100% 125%, 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 400ms;
+}
+a:not(.noUnderline):hover,
+a:not(.noUnderline):focus {
+  background-size: 0 0.1em, 100% 0.1em;
+}
+
+/* Fade in animation */
+main {
+  animation: fadeInAnimation ease 1.5s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

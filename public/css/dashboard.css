@@ -1,0 +1,27 @@
+/* The Dashboard css */
+/* Try to define all reusable css in style.css, because I guess copy and paste is annoying to do for each file?  I'll */
+h1 {
+  display: inline;
+  position: relative;
+  top: 4px;
+}
+inline {
+  display: inline;
+}
+.container {
+  width: 600px;
+}
+
+table{
+  border:none;
+  font-size:16px;
+}
+table img{
+  position:relative;
+  bottom:-4px;
+  width:32px;
+  height:32px;
+}
+table tr td code{
+  margin:16px;
+}

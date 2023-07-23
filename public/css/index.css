@@ -1,0 +1,25 @@
+@keyframes intro-animation{
+  from{
+    left:-300px;
+    transform: translateX(-50%) rotateY(70deg) skewX(-10deg);
+    opacity:0;
+  }
+  to{
+    left:50%;
+    transform: translateX(-50%) skewX(0deg) rotateY(0deg);
+    opacity:1;
+  }
+}
+#introduction{
+  max-width:450px;
+  position:relative;
+  animation-name:intro-animation;
+  animation-timing-function:cubic-bezier(0.7, 0.2, 0.7, 1.4);
+  left:50%;
+  transform:translateX(-50%);
+  animation-duration: 1.6s;
+  margin-top:20px;
+  margin-bottom:20px;
+  line-height:28px;
+  font-size:large;
+}

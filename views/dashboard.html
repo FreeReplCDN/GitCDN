@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Can replace with your own locale -->
+  <head>
+    <!-- Compatability -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- Title and Description -->
+    <title>Dashboard - GitCDN</title>
+    <meta
+      name="description"
+      content="Dashboard of GitCDN, a free reliable CDN hosting service."
+    />
+    <meta name="author" content="GitCDN team" />
+
+    <!-- Social media -->
+    <meta property="og:title" content="GitCDN" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://gitcdn.repl.co" />
+    <!-- This is for social media-->
+    <meta
+      property="og:description"
+      content="The dashboard of GitCDN, a free, reliable CDN hosting service, brought to you with the power of Github."
+    />
+    <meta property="og:image" content="/img/preview.png" />
+
+    <!-- Favicons and icons -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!-- Link your CSS up here -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
+  </head>
+  <body>
+    <!-- Website Content -->
+    <header>
+      <h1>Dashboard</h1>
+      <button class="CSSButton inline" id="uploadFile">↑ Upload files ↑</button>
+      <input class="CSSButton"type="file" id="file" name="file" multiple />
+      <button
+        class="CSSButton inline"
+        onclick="document.cookie = 'REPL_AUTH=-1'"
+      >
+        Clear Replit AUTH
+      </button>
+    </header>
+    <div class="container">
+      <h1>Your files</h1>
+      <span class="filelist nofiles center">
+        <!-- Javascript adds the class nofiles if there is no file. -->
+        <!-- Template for no files, to be added with javascript. -->
+
+        <p>You don't have any files at the moment.</p>
+
+        <!--Generate here the files with JS-->
+
+        <table class="fileitems">
+          <tr>
+            <th>
+              <code>image</code>
+            </th>
+            <th>
+              <code>name</code>
+            </th>
+            <th>
+              <code>size</code>
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <img class="fileicon" src="/img/fileicon/python.png" />
+            </td>
+            <td>
+              <code class="filename">main.py</code>
+            </td>
+            <td>
+              <code class="filesize">31.4 GiB</code>
+            </td>
+          </tr>
+                   
+          
+        </table>
+        <!-- Gotta download some files to here, wait a sec... -->
+        <!-- Check chat-->
+      </span>
+    </div>
+
+    <!-- Javascript -->
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/script.js"></script>
+  </body>
+</html>

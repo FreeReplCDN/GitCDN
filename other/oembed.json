@@ -1,0 +1,12 @@
+{
+  "version": "1.0",
+  "type": "photo",
+  "width": 729,
+  "height": 452,
+  "title": "GitCDN",
+  "url": "https://gitcdn.repl.co/img/preview.png",
+  "author_name": "GitCDN",
+  "author_url": "https://gitcdn.repl.co",
+  "provider_name": "GitCDN",
+  "provider_url": "http://gitcdn.repl.co/"
+}
