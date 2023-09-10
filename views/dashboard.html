@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
     <!-- Title and Description -->
-    <title>Dashboard - GitCDN</title>
+    <title>Dashboard | GitCDN</title>
     <meta
       name="description"
       content="Dashboard of GitCDN, a free reliable CDN hosting service."
@@ -33,6 +33,10 @@
     <!-- Link your CSS up here -->
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/dashboard.css" />
+
+    <!-- Scripts -->
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/script.js"></script>
   </head>
   <body>
     <!-- Website Content -->
@@ -42,7 +46,7 @@
       <input class="CSSButton"type="file" id="file" name="file" multiple />
       <button
         class="CSSButton inline"
-        onclick="document.cookie = 'REPL_AUTH=-1'"
+        onclick="window.location='/logout'"
       >
         Clear Replit AUTH
       </button>
@@ -58,7 +62,7 @@
         <!--Generate here the files with JS-->
 
         <table class="fileitems">
-          <tr>
+          <!--tr>
             <th>
               <code>image</code>
             </th>
@@ -68,7 +72,7 @@
             <th>
               <code>size</code>
             </th>
-          </tr>
+        </tr-->
           <tr>
             <td>
               <img class="fileicon" src="/img/fileicon/python.png" />
@@ -87,9 +91,5 @@
         <!-- Check chat-->
       </span>
     </div>
-
-    <!-- Javascript -->
-    <script src="/js/dashboard.js"></script>
-    <script src="/js/script.js"></script>
   </body>
 </html>

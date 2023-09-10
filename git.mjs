@@ -49,17 +49,17 @@ async function _writeFile(owner, repo, file, content, sha = null) {
 
 // List files under a tree SHA
 
-//Explanation when you input for example
+//Explanation : when you input for example
 /*
 "clement070110" as owner
 "darky" as repo
 "public" as path
 It will give
 [
-  true, //This is path exists
+  true, //If the path exists
   [ // all files
     'collide.js', 'icon.jpeg',
-    'index.js' etc...
+    'index.js' ect...
   ]
 ]
 
@@ -143,6 +143,24 @@ async function getFile(owner, repo, path) {
   return [false, response.status];
 }
 
+async function createRepo(owner, repo) {
+  let response;
+  response = await octokit.request('POST /orgs/{org}/repos', {
+    org: owner,
+    name: repo,
+    description: 'This is <ins>not</ins> your first repository',
+    homepage: 'https://github.com',
+    'private': true,//private?
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
+  });
+  console.log(response);
+}
+
+// Create repo
+//await createRepo("FreeReplCDN", "testRepo2");
+
 // Create file
 // await _writeFile("FreeReplCDN", "testRepo", "new.txt", "can you see this?")
 // let rootTreeSHA = await _getTreeSHA("py660", "PyChat", "master");
@@ -158,4 +176,4 @@ async function getFile(owner, repo, path) {
 
 console.log("EOF");
 // beware of ratelimits
-export { listFiles, getFile };
+export { listFiles, getFile, createRepo };

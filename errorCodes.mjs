@@ -6,8 +6,3 @@ function getErrorDescription(httpErrorCode) {
 }
 
 export { getErrorDescription };
-
-// Example usage
-//const errorCode = 404; // Replace this with the desired HTTP error code
-//const errorDescription = getErrorDescription(errorCode);
-// console.log(`Error ${errorCode}: ${errorDescription}`);

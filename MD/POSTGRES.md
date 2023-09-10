@@ -9,19 +9,17 @@
 
 <br>
 
-## Getting started
+# Getting started
 
-<br>
-<img height="220" width="458" alt="Good UX with Postgres.js" src="https://raw.githubusercontent.com/porsager/postgres/master/demo.gif">
-<br>
+https://raw.githubusercontent.com/porsager/postgres/master/demo.gif
 
-### Installation
+## Installation
 
 ```bash
 $ npm install postgres
 ```
 
-### Usage
+## Usage
 
 Create your `sql` database instance
 
@@ -67,28 +65,9 @@ async function insertUser({ name, age }) {
 }
 ```
 
-## Table of Contents
+# Connection
 
-- [Connection](#connection)
-- [Queries](#queries)
-- [Building queries](#building-queries)
-- [Advanced query methods](#advanced-query-methods)
-- [Transactions](#transactions)
-- [Data Transformation](#data-transformation)
-- [Listen & notify](#listen--notify)
-- [Realtime subscribe](#realtime-subscribe)
-- [Numbers, bigint, numeric](#numbers-bigint-numeric)
-- [Result Array](#result-array)
-- [Connection details](#connection-details)
-- [Custom Types](#custom-types)
-- [Teardown / Cleanup](#teardown--cleanup)
-- [Error handling](#error-handling)
-- [TypeScript support](#typescript-support)
-- [Changelog](./CHANGELOG.md)
-
-## Connection
-
-### `postgres([url], [options])`
+## `postgres([url], [options])`
 
 You can use either a `postgres://` url connection string or the options to define your database connection properties. Options in the object will override any present in the url. Options will fall back to the same environment variables as psql.
 
@@ -105,9 +84,9 @@ const sql = postgres('postgres://username:password@host:port/database', {
 
 More options can be found in the [Connection details section](#connection-details).
 
-## Queries
+# Queries
 
-### `` await sql`...` -> Result[] ``
+## `` await sql`...` -> Result[] ``
 
 Postgres.js utilizes [Tagged template functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates) to process query parameters **before** interpolation. Using tagged template literals benefits developers by:
 
@@ -134,7 +113,7 @@ const xs = await sql`
 
 > Please note that queries are first executed when `awaited` – or instantly by using [`.execute()`](#execute).
 
-### Query parameters
+## Query parameters
 
 Parameters are automatically extracted and handled by the database so that SQL injection isn't possible. No special handling is necessary, simply use tagged template literals as usual.
 
@@ -156,7 +135,7 @@ const users = await sql`
 
 > Be careful with quotation marks here. Because Postgres infers column types, you do not need to wrap your interpolated parameters in quotes like `'${name}'`. This will cause an error because the tagged template replaces `${name}` with `$1` in the query string, leaving Postgres to do the interpolation. If you wrap that in a string, Postgres will see `'$1'` and interpret it as a string as opposed to a parameter.
 
-### Dynamic column selection
+## Dynamic column selection
 
 ```js
 const columns = ['name', 'age']
@@ -171,7 +150,7 @@ sql`
 select "name", "age" from users
 ```
 
-### Dynamic inserts
+## Dynamic inserts
 
 ```js
 const user = {
@@ -191,7 +170,7 @@ insert into users ("name", "age") values ($1, $2)
 
 **You can omit column names and simply execute `sql(user)` to get all the fields from the object as columns**. Be careful not to allow users to supply columns that you do not want to be inserted.
 
-#### Multiple inserts in one query
+## Multiple inserts in one query
 
 If you need to insert multiple rows at the same time it's also much faster to do it with a single `insert`. Simply pass an array of objects to `sql()`.
 
@@ -218,7 +197,7 @@ sql`insert into users ${ sql(users) }`
 insert into users ("name", "age") values ($1, $2), ($3, $4)
 ```
 
-### Dynamic columns in updates
+## Dynamic columns in updates
 
 This is also useful for update queries
 
@@ -240,7 +219,7 @@ sql`
 update users set "name" = $1, "age" = $2 where user_id = $3
 ```
 
-### Multiple updates in one query
+## Multiple updates in one query
 
 It's possible to create multiple udpates in a single query. It's necessary to use arrays intead of objects to ensure the order of the items so that these correspond with the column names.
 
@@ -258,7 +237,7 @@ sql`
 `;
 ```
 
-### Dynamic values and `where in`
+## Dynamic values and `where in`
 
 Value lists can also be created dynamically, making `where in` queries simple too.
 
@@ -281,12 +260,12 @@ const [{ a, b, c }] => await sql`
 `
 ```
 
-## Building queries
+# Building queries
 
 Postgres.js features a simple dynamic query builder by conditionally appending/omitting query fragments.
 It works by nesting ` sql`` ` fragments within other ` sql`` ` calls or fragments. This allows you to build dynamic queries safely without risking sql injections through usual string concatenation.
 
-### Partial queries
+## Partial queries
 
 ```js
 const olderThan = x => sql`and age > ${ x }`
@@ -309,7 +288,7 @@ select * from users where name is not null
 select * from users where name is not null and age > 50
 ```
 
-### Dynamic filters
+## Dynamic filters
 
 ```js
 sql`
@@ -328,7 +307,7 @@ select * from users
 select * from users where user_id = $1
 ```
 
-### SQL functions
+## SQL functions
 
 Using keywords or calling functions dynamically is also possible by using ` sql`` ` fragments.
 
@@ -343,7 +322,7 @@ sql`
 update users set updated_at = now()
 ```
 
-### Table names
+## Table names
 
 Dynamic identifiers like table names and column names is also supported like so:
 
@@ -359,7 +338,7 @@ sql`
 select "id" from "users"
 ```
 
-### Quick primer on interpolation
+## Quick primer on interpolation
 
 Here's a quick oversight over all the ways to do interpolation in a query template string:
 
@@ -370,15 +349,15 @@ Here's a quick oversight over all the ways to do interpolation in a query templa
 | `${ sql([] or {}, ...) }` | for helpers                   | `` sql`INSERT INTO users ${sql({ name: 'Peter'})}`  ``     |
 | `${ 'somevalue' }`        | for values                    | `` sql`SELECT * FROM users WHERE age = ${42}`  ``          |
 
-## Advanced query methods
+# Advanced query methods
 
-### Cursors
+## Cursors
 
-#### ` await sql``.cursor([rows = 1], [fn]) `
+## ` await sql``.cursor([rows = 1], [fn]) `
 
 Use cursors if you need to throttle the amount of rows being returned from a query. You can use a cursor either as an [async iterable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of) or with a callback function. For a callback function new results won't be requested until the promise / async callback function has resolved.
 
-##### callback function
+### callback function
 
 ```js
 await sql`
@@ -391,7 +370,7 @@ await sql`
 });
 ```
 
-##### for await...of
+### for await...of
 
 ```js
 // for await...of
@@ -430,9 +409,9 @@ await sql`
 });
 ```
 
-### Instant iteration
+## Instant iteration
 
-#### ` await sql``.forEach(fn) `
+## ` await sql``.forEach(fn) `
 
 If you want to handle rows returned by a query one by one, you can use `.forEach` which returns a promise that resolves once there are no more rows.
 
@@ -446,33 +425,33 @@ await sql`
 // No more rows
 ```
 
-### Query Descriptions
+## Query Descriptions
 
-#### ` await sql``.describe() -> Result[] `
+## ` await sql``.describe() -> Result[] `
 
 Rather than executing a given query, `.describe` will return information utilized in the query process. This information can include the query identifier, column types, etc.
 
 This is useful for debugging and analyzing your Postgres queries. Furthermore, **`.describe` will give you access to the final generated query string that would be executed.**
 
-### Rows as Array of Values
+## Rows as Array of Values
 
-#### ` sql``.values() `
+## ` sql``.values() `
 
 Using `.values` will return rows as an array of values for each column, instead of objects.
 
 This can be useful to receive identically named columns, or for specific performance/transformation reasons. The column definitions are still included on the result array, plus access to parsers for each column.
 
-### Rows as Raw Array of Buffers
+## Rows as Raw Array of Buffers
 
-#### ` sql``.raw() `
+## ` sql``.raw() `
 
 Using `.raw` will return rows as an array with `Buffer` values for each column, instead of objects.
 
 This can be useful for specific performance/transformation reasons. The column definitions are still included on the result array, plus access to parsers for each column.
 
-### Queries in Files
+## Queries in Files
 
-#### `await sql.file(path, [args], [options]) -> Result[]`
+## `await sql.file(path, [args], [options]) -> Result[]`
 
 Using a file for a query is also supported with optional parameters to use if the file includes `$1, $2, etc`
 
@@ -480,9 +459,9 @@ Using a file for a query is also supported with optional parameters to use if th
 const result = await sql.file("query.sql", ["Murray", 68]);
 ```
 
-### Multiple statements in one query
+## Multiple statements in one query
 
-#### ` await sql``.simple() `
+## ` await sql``.simple() `
 
 The postgres wire protocol supports ["simple"](https://www.postgresql.org/docs/current/protocol-flow.html#id-1.10.6.7.4) and ["extended"](https://www.postgresql.org/docs/current/protocol-flow.html#PROTOCOL-FLOW-EXT-QUERY) queries. "simple" queries supports multiple statements, but does not support any dynamic parameters. "extended" queries support parameters but only one statement. To use "simple" queries you can use
 ` sql``.simple() `. That will create it as a simple query.
@@ -491,11 +470,11 @@ The postgres wire protocol supports ["simple"](https://www.postgresql.org/docs/c
 await sql`select 1; select 2;`.simple();
 ```
 
-### Copy to/from as Streams
+## Copy to/from as Streams
 
 Postgres.js supports [`COPY ...`](https://www.postgresql.org/docs/14/sql-copy.html) queries, which are exposed as [Node.js streams](https://nodejs.org/api/stream.html).
 
-#### `` await sql`copy ... from stdin`.writable() -> Writable ``
+## `` await sql`copy ... from stdin`.writable() -> Writable ``
 
 ```js
 import { pipeline } from "node:stream/promises";
@@ -507,9 +486,9 @@ const query = await sql`copy users (name, age) from stdin`.writable();
 await pipeline(userStream, query);
 ```
 
-#### `` await sql`copy ... to stdout`.readable() -> Readable ``
+## `` await sql`copy ... to stdout`.readable() -> Readable ``
 
-##### Using Stream Pipeline
+### Using Stream Pipeline
 
 ```js
 import { pipeline } from "node:stream/promises";
@@ -520,7 +499,7 @@ await pipeline(readableStream, createWriteStream("output.tsv"));
 // output.tsv content: `Murray\t68\nWalter\t80\n`
 ```
 
-##### Using `for await...of`
+### Using `for await...of`
 
 ```js
 const readableStream = await sql`
@@ -537,7 +516,7 @@ for await (const chunk of readableStream) {
 
 > **NOTE** This is a low-level API which does not provide any type safety. To make this work, you must match your [`copy query` parameters](https://www.postgresql.org/docs/14/sql-copy.html) correctly to your [Node.js stream read or write](https://nodejs.org/api/stream.html) code. Ensure [Node.js stream backpressure](https://nodejs.org/en/docs/guides/backpressuring-in-streams/) is handled correctly to avoid memory exhaustion.
 
-### Canceling Queries in Progress
+## Canceling Queries in Progress
 
 Postgres.js supports, [canceling queries in progress](https://www.postgresql.org/docs/7.1/protocol-protocol.html#AEN39000). It works by opening a new connection with a protocol level startup message to cancel the current query running on a specific connection. That means there is no guarantee that the query will be canceled, and due to the possible race conditions it might even result in canceling another query. This is fine for long running queries, but in the case of high load and fast queries it might be better to simply ignore results instead of canceling.
 
@@ -547,18 +526,18 @@ setTimeout(() => query.cancel(), 100);
 const result = await query;
 ```
 
-### Execute
+## Execute
 
-#### ` await sql``.execute() `
+## ` await sql``.execute() `
 
 The lazy Promise implementation in Postgres.js is what allows it to distinguish [Nested Fragments](#building-queries) from the main outer query. This also means that queries are always executed at the earliest in the following tick. If you have a specific need to execute the query in the same tick, you can call `.execute()`
 
-### Unsafe raw string queries
+## Unsafe raw string queries
 
 <details>
 <summary>Advanced unsafe use cases</summary>
 
-### `await sql.unsafe(query, [args], [options]) -> Result[]`
+## `await sql.unsafe(query, [args], [options]) -> Result[]`
 
 If you know what you're doing, you can use `unsafe` to pass any string you'd like to postgres. Please note that this can lead to SQL injection if you're not careful.
 
@@ -591,9 +570,9 @@ await sql`
 
 </details>
 
-## Transactions
+# Transactions
 
-#### BEGIN / COMMIT `await sql.begin([options = ''], fn) -> fn()`
+## BEGIN / COMMIT `await sql.begin([options = ''], fn) -> fn()`
 
 Use `sql.begin` to start a new transaction. Postgres.js will reserve a connection for the transaction and supply a scoped `sql` instance for all transaction uses in the callback function. `sql.begin` will resolve with the returned value from the callback function.
 
@@ -631,7 +610,7 @@ const result = await sql.begin((sql) => [
 ]);
 ```
 
-#### SAVEPOINT `await sql.savepoint([name], fn) -> fn()`
+## SAVEPOINT `await sql.savepoint([name], fn) -> fn()`
 
 ```js
 sql
@@ -670,7 +649,7 @@ sql
   });
 ```
 
-#### PREPARE `await sql.prepare([name]) -> fn()`
+## PREPARE `await sql.prepare([name]) -> fn()`
 
 Indicates that the transactions should be prepared using the `PREPARED TRANASCTION [NAME]` statement
 instead of being committed.
@@ -691,7 +670,7 @@ sql.begin("read write", async (sql) => {
 
 Do note that you can often achieve the same result using [`WITH` queries (Common Table Expressions)](https://www.postgresql.org/docs/current/queries-with.html) instead of using transactions.
 
-## Data Transformation
+# Data Transformation
 
 Postgres.js allows for transformation of the data passed to or returned from a query by using the `transform` option.
 
@@ -744,7 +723,7 @@ console.log(data); // [ { a_test: 1 } ]
 
 > Note that Postgres.js does not rewrite the static parts of the tagged template strings. So to transform column names in your queries, the `sql()` helper must be used - eg. `${ sql('columnName') }` as in the examples above.
 
-### Transform `undefined` Values
+## Transform `undefined` Values
 
 By default, Postgres.js will throw the error `UNDEFINED_VALUE: Undefined values are not allowed` when undefined values are passed
 
@@ -781,7 +760,7 @@ const data = await sql`SELECT ${sql("aTest")} FROM transform_undefined`;
 console.log(data); // [ { aTest: null } ]
 ```
 
-### Custom Transform Functions
+## Custom Transform Functions
 
 To specify your own transformation functions, you can use the `column`, `value` and `row` options inside of `transform`, each an object possibly including `to` and `from` keys:
 
@@ -817,11 +796,11 @@ const sql = postgres({
 });
 ```
 
-## Listen & notify
+# Listen & notify
 
 When you call `.listen`, a dedicated connection will be created to ensure that you receive notifications instantly. This connection will be used for any further calls to `.listen`. The connection will automatically reconnect according to a backoff reconnection pattern to not overload the database server.
 
-### Listen `await sql.listen(channel, onnotify, [onlisten]) -> { state }`
+## Listen `await sql.listen(channel, onnotify, [onlisten]) -> { state }`
 
 `.listen` takes the channel name, a function to handle each notify, and an optional function to run every time listen is registered and ready (happens on initial connect and reconnects). It returns a promise which resolves once the `LISTEN` query to Postgres completes, or if there is already a listener active.
 
@@ -846,7 +825,7 @@ function run(job) {
 }
 ```
 
-### Notify `await sql.notify(channel, payload) -> Result[]`
+## Notify `await sql.notify(channel, payload) -> Result[]`
 
 Notify can be done as usual in SQL, or by using the `sql.notify` method.
 
@@ -854,21 +833,21 @@ Notify can be done as usual in SQL, or by using the `sql.notify` method.
 sql.notify("news", JSON.stringify({ no: "this", is: "news" }));
 ```
 
-## Realtime subscribe
+# Realtime subscribe
 
 Postgres.js implements the logical replication protocol of PostgreSQL to support subscription to real-time updates of `insert`, `update` and `delete` operations.
 
 > **NOTE** To make this work you must [create the proper publications in your database](https://www.postgresql.org/docs/current/sql-createpublication.html), enable logical replication by setting `wal_level = logical` in `postgresql.conf` and connect using either a replication or superuser.
 
-### Quick start
+## Quick start
 
-#### Create a publication (eg. in migration)
+## Create a publication (eg. in migration)
 
 ```sql
 CREATE PUBLICATION alltables FOR ALL TABLES
 ```
 
-#### Subscribe to updates
+## Subscribe to updates
 
 ```js
 const sql = postgres({ publications: "alltables" });
@@ -885,11 +864,11 @@ const { unsubscribe } = await sql.subscribe(
 );
 ```
 
-### Subscribe pattern
+## Subscribe pattern
 
 You can subscribe to specific operations, tables, or even rows with primary keys.
 
-#### `operation` `:` `schema` `.` `table` `=` `primary_key`
+## `operation` `:` `schema` `.` `table` `=` `primary_key`
 
 **`operation`** is one of `* | insert | update | delete` and defaults to `*`
 
@@ -899,7 +878,7 @@ You can subscribe to specific operations, tables, or even rows with primary keys
 
 **`primary_key`** can be used to only subscribe to specific rows
 
-### Examples
+## Examples
 
 ```js
 sql.subscribe('*',                () => /* everything */ )
@@ -909,7 +888,7 @@ sql.subscribe('delete:users',     () => /* all deletes on the public.users table
 sql.subscribe('update:users=1',   () => /* all updates on the users row with a primary key = 1 */ )
 ```
 
-## Numbers, bigint, numeric
+# Numbers, bigint, numeric
 
 `Number` in javascript is only able to represent 2<sup>53</sup>-1 safely which means that types in PostgreSQLs like `bigint` and `numeric` won't fit into `Number`.
 
@@ -927,19 +906,19 @@ const sql = postgres({
 
 There is currently no guaranteed way to handle `numeric` / `decimal` types in native Javascript. **These [and similar] types will be returned as a `string`**. The best way in this case is to use [custom types](#custom-types).
 
-## Result Array
+# Result Array
 
 The `Result` Array returned from queries is a custom array allowing for easy destructuring or passing on directly to JSON.stringify or general Array usage. It includes the following properties.
 
-### .count
+## .count
 
 The `count` property is the number of affected rows returned by the database. This is usefull for insert, update and delete operations to know the number of rows since .length will be 0 in these cases if not using `RETURNING ...`.
 
-### .command
+## .command
 
 The `command` run by the query - eg. one of `SELECT`, `UPDATE`, `INSERT`, `DELETE`
 
-### .columns
+## .columns
 
 The `columns` returned by the query useful to determine types, or map to the result values when using `.values()`
 
@@ -951,7 +930,7 @@ The `columns` returned by the query useful to determine types, or map to the res
 }
 ```
 
-### .statement
+## .statement
 
 The `statement` contains information about the statement implicitly created by Postgres.js.
 
@@ -964,13 +943,13 @@ The `statement` contains information about the statement implicitly created by P
 }
 ```
 
-### .state
+## .state
 
 This is the state `{ pid, secret }` of the connection that executed the query.
 
-## Connection details
+# Connection details
 
-### All Postgres options
+## All Postgres options
 
 ```js
 const sql = postgres('postgres://username:password@host:port/database', {
@@ -1010,7 +989,7 @@ const sql = postgres('postgres://username:password@host:port/database', {
 
 Note that `max_lifetime = 60 * (30 + Math.random() * 30)` by default. This resolves to an interval between 45 and 90 minutes to optimize for the benefits of prepared statements **and** working nicely with Linux's OOM killer.
 
-### SSL
+## SSL
 
 Although [vulnerable to MITM attacks](https://security.stackexchange.com/a/229297/174913), a common configuration for the `ssl` option for some cloud providers is to set `rejectUnauthorized` to `false` (if `NODE_ENV` is `production`):
 
@@ -1025,7 +1004,7 @@ const sql =
 
 For more information regarding `ssl` with `postgres`, check out the [Node.js documentation for tls](https://nodejs.org/dist/latest-v16.x/docs/api/tls.html#new-tlstlssocketsocket-options).
 
-### Multi-host connections - High Availability (HA)
+## Multi-host connections - High Availability (HA)
 
 Multiple connection strings can be passed to `postgres()` in the form of `postgres('postgres://localhost:5432,localhost:5433', ...)`. This works the same as native the `psql` command. Read more at [multiple host URIs](https://www.postgresql.org/docs/13/libpq-connect.html#LIBPQ-MULTIPLE-HOSTS).
 
@@ -1033,7 +1012,7 @@ Connections will be attempted in order of the specified hosts/ports. On a succes
 
 If you specify `target_session_attrs: 'primary'` or `PGTARGETSESSIONATTRS=primary` Postgres.js will only connect to the primary host, allowing for zero downtime failovers.
 
-### The Connection Pool
+## The Connection Pool
 
 Connections are created lazily once a query is created. This means that simply doing const `sql = postgres(...)` won't have any effect other than instantiating a new `sql` instance.
 
@@ -1061,7 +1040,7 @@ There are no guarantees about queries executing in order unless using a transact
 
 Since this library automatically creates prepared statements, it also has a default max lifetime for connections to prevent memory bloat on the database itself. This is a random interval for each connection between 45 and 90 minutes. This allows multiple connections to independently come up and down without affecting the service.
 
-### Connection timeout
+## Connection timeout
 
 By default, connections will not close until `.end()` is called. However, it may be useful to have them close automatically when:
 
@@ -1080,7 +1059,7 @@ const sql = postgres({
 });
 ```
 
-### Auto fetching of array types
+## Auto fetching of array types
 
 Postgres.js will automatically fetch table/array-type information when it first connects to a database.
 
@@ -1088,7 +1067,7 @@ If you have revoked access to `pg_catalog` this feature will no longer work and 
 
 You can disable this feature by setting `fetch_types` to `false`.
 
-### Environmental variables
+## Environmental variables
 
 It is also possible to connect to the database without a connection string or any options. Postgres.js will fall back to the common environment variables used by `psql` as in the table below:
 
@@ -1106,11 +1085,11 @@ const sql = postgres();
 | `idle_timeout`    | `PGIDLE_TIMEOUT`         |
 | `connect_timeout` | `PGCONNECT_TIMEOUT`      |
 
-### Prepared statements
+## Prepared statements
 
 Prepared statements will automatically be created for any queries where it can be inferred that the query is static. This can be disabled by using the `prepare: false` option. For instance — this is useful when [using PGBouncer in `transaction mode`](https://github.com/porsager/postgres/issues/93#issuecomment-656290493).
 
-## Custom Types
+# Custom Types
 
 You can add ergonomic support for custom types, or simply use `sql.typed(value, type)` inline, where type is the PostgreSQL `oid` for the type and the correctly serialized string. _(`oid` values for types can be found in the `pg_catalog.pg_type` table.)_
 
@@ -1152,7 +1131,7 @@ const [custom] = sql`
 // custom = { name: 'wat', rect: { x: 13, y: 37, width: 42, height: 80 } }
 ```
 
-### Custom socket
+## Custom socket
 
 Easily do in-process ssh tunneling to your database by providing a custom socket for Postgres.js to use. The function (optionally async) must return a socket-like duplex stream.
 
@@ -1178,13 +1157,13 @@ const sql = postgres({
 });
 ```
 
-## Teardown / Cleanup
+# Teardown / Cleanup
 
 To ensure proper teardown and cleanup on server restarts use `await sql.end()` before `process.exit()`.
 
 Calling `sql.end()` will reject new queries and return a Promise which resolves when all queries are finished and the underlying connections are closed. If a `{ timeout }` option is provided any pending queries will be rejected once the timeout (in seconds) is reached and the connections will be destroyed.
 
-#### Sample shutdown using [Prexit](https://github.com/porsager/prexit)
+## Sample shutdown using [Prexit](https://github.com/porsager/prexit)
 
 ```js
 import prexit from "prexit";
@@ -1195,7 +1174,7 @@ prexit(async () => {
 });
 ```
 
-## Error handling
+# Error handling
 
 Errors are all thrown to related queries and never globally. Errors coming from database itself are always in the [native Postgres format](https://www.postgresql.org/docs/current/errcodes-appendix.html), and the same goes for any [Node.js errors](https://nodejs.org/api/errors.html#errors_common_system_errors) eg. coming from the underlying connection.
 
@@ -1205,73 +1184,73 @@ Query errors will also contain the `query` string and the `parameters`. These ar
 
 There are also the following errors specifically for this library.
 
-##### UNSAFE_TRANSACTION
+### UNSAFE_TRANSACTION
 
 > Only use sql.begin or max: 1
 
 To ensure statements in a transaction runs on the same connection (which is required for them to run inside the transaction), you must use [`sql.begin(...)`](#transactions) or only allow a single connection in options (`max: 1`).
 
-##### UNDEFINED_VALUE
+### UNDEFINED_VALUE
 
 > Undefined values are not allowed
 
 Postgres.js won't accept `undefined` as values in tagged template queries since it becomes ambiguous what to do with the value. If you want to set something to null, use `null` explicitly.
 
-##### MESSAGE_NOT_SUPPORTED
+### MESSAGE_NOT_SUPPORTED
 
 > X (X) is not supported
 
 Whenever a message is received from Postgres which is not supported by this library. Feel free to file an issue if you think something is missing.
 
-##### MAX_PARAMETERS_EXCEEDED
+### MAX_PARAMETERS_EXCEEDED
 
 > Max number of parameters (65534) exceeded
 
 The postgres protocol doesn't allow more than 65534 (16bit) parameters. If you run into this issue there are various workarounds such as using `sql([...])` to escape values instead of passing them as parameters.
 
-##### SASL_SIGNATURE_MISMATCH
+### SASL_SIGNATURE_MISMATCH
 
 > Message type X not supported
 
 When using SASL authentication the server responds with a signature at the end of the authentication flow which needs to match the one on the client. This is to avoid [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). If you receive this error the connection was canceled because the server did not reply with the expected signature.
 
-##### NOT_TAGGED_CALL
+### NOT_TAGGED_CALL
 
 > Query not called as a tagged template literal
 
 Making queries has to be done using the sql function as a [tagged template](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates). This is to ensure parameters are serialized and passed to Postgres as query parameters with correct types and to avoid SQL injection.
 
-##### AUTH_TYPE_NOT_IMPLEMENTED
+### AUTH_TYPE_NOT_IMPLEMENTED
 
 > Auth type X not implemented
 
 Postgres supports many different authentication types. This one is not supported.
 
-##### CONNECTION_CLOSED
+### CONNECTION_CLOSED
 
 > write CONNECTION_CLOSED host:port
 
 This error is thrown if the connection was closed without an error. This should not happen during normal operations, so please create an issue if this was unexpected.
 
-##### CONNECTION_ENDED
+### CONNECTION_ENDED
 
 > write CONNECTION_ENDED host:port
 
 This error is thrown if the user has called [`sql.end()`](#teardown--cleanup) and performed a query afterward.
 
-##### CONNECTION_DESTROYED
+### CONNECTION_DESTROYED
 
 > write CONNECTION_DESTROYED host:port
 
 This error is thrown for any queries that were pending when the timeout to [`sql.end({ timeout: X })`](#teardown--cleanup) was reached.
 
-##### CONNECTION_CONNECT_TIMEOUT
+### CONNECTION_CONNECT_TIMEOUT
 
 > write CONNECTION_CONNECT_TIMEOUT host:port
 
 This error is thrown if the startup phase of the connection (tcp, protocol negotiation, and auth) took more than the default 30 seconds or what was specified using `connect_timeout` or `PGCONNECT_TIMEOUT`.
 
-## TypeScript support
+# TypeScript support
 
 `postgres` has TypeScript support. You can pass a row list type for your queries in this way:
 
@@ -1315,7 +1294,7 @@ const [first, second] = await sql<
 
 We do our best to type all the public API, however types are not always updated when features are added or changed. Feel free to open an issue if you have trouble with types.
 
-## Migration tools
+# Migration tools
 
 Postgres.js doesn't come with any migration solution since it's way out of scope, but here are some modules that support Postgres.js for migrations:
 
@@ -1323,7 +1302,7 @@ Postgres.js doesn't come with any migration solution since it's way out of scope
 - https://github.com/lukeed/ley
 - https://github.com/JAForbes/pgmg
 
-## Thank you
+# Thank you
 
 A really big thank you to [@JAForbes](https://twitter.com/jmsfbs) who introduced me to Postgres and still holds my hand navigating all the great opportunities we have.
 

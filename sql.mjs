@@ -4,5 +4,5 @@ const sql = postgres({
   /* options */
 }); // will use psql environment variables
 
-export default sql;
+export { sql };
 // https://github.com/porsager/postgres#connection

@@ -3,29 +3,25 @@
 /* Default styles */
 :root {
   --background-color: white;
+  --mid-background-color: #ccc;
+  --midground-color: #595959;
   --foreground-color: black;
   --accent-color: #00aeff;
   --positive-color: #ffd030;
+  --anti-positive-color: black;
   --negative-color: #ff6666;
-  --midground-color: #595959;
-  --mid-background-color: #ccc;
   --ambient-glow-color: #a3a3a3;
   --font-family: "Inter", sans-serif;
-  font-weight: 500;
-  /*AAAAAA NOT GOOD FOR HEADERS yes it isn't good, AND AAAAAHHHH!!!!!*/
-  /* all of the good fontsare in fonts.google.com */
+  --font-weight: 500;
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --background-color: rgb(10, 10, 10);
-    --foreground-color: white;
-    --midground-color: #444;
     --mid-background-color: #222;
+    --midground-color: #444;
+    --foreground-color: white;
     --accent-color: #005f8c;
     --ambient-glow-color: #262626;
-  }
-  header {
-    color: var(--background-color);
   }
 }
 body {
@@ -34,8 +30,14 @@ body {
   font-family: var(--font-family);
 }
 
+/* Links */
+footer a, header a {
+  color: var(--foreground-color);
+}
+
 /* Top navbar */
 header {
+  color: var(--anti-positive-color);
   display: inline-block;
   width: 100%;
   padding: 8px;
@@ -44,6 +46,7 @@ header {
   font-size: 25px;
 }
 header #linksButton {
+  cursor: pointer;
   display: none;
   width: 0px;
   height: 0px;
@@ -54,47 +57,51 @@ header a {
 }
 .linksContainer,
 .leftLinksContainer {
-  display: inline-block; /*otherwise scrolling would remove it from view */
+  display: inline-block; /* otherwise scrolling would remove it from view */
   z-index: 0;
-  height: 25px; /*? What do you want to do, Ah okay*/
+  height: 25px;
   margin: 0;
   border: none;
-  background-color: var(
-    --positive-color
-  ); /*the shade of yellow */ /* positive color?Idk, I did't name it so.*/
+  background-color: var(--positive-color); /* the shade of yellow */
   max-width: 80%;
   padding-left: 8px;
   padding-right: 15px;
   padding-top: 10px;
   padding-bottom: 10px;
 }
+.leftLinksContainer img{
+  height:25px;
+  margin-right:5px;
+  transform:scale(2.2);
+}
 @media only screen and (max-width: 720px) {
-  /*When width is smaller than 720px*/
+  /* When width is smaller than 720px */
   header a {
     display: block;
   }
   header #linksButton {
+    cursor: pointer;
     display: inline;
     width: 30px;
     height: 25px;
+    padding: 8px;
   }
   .linksContainer {
     display: none; /*otherwise scrolling would remove it from view */
     z-index: 2;
     right: 0;
+    width: 100%;
     top: 46px;
-    height: calc(100vh-48px);
+    height: calc(100%);
     margin: 0;
     border: none;
-    background-color: var(
-      --negative-color
-    ); /* positive color?Idk, I did't name it so.*/
+    background-color: var(--negative-color); /* positive color?Idk, I did't name it so.*/
     position: sticky;
     max-width: 80%;
-    padding-left: 8px;
+    /*padding-left: 8px;
     padding-right: 15px;
     padding-top: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 10px;*/
   }
 }
 
@@ -152,9 +159,9 @@ header a {
   margin-top: 5%;
   transition-duration: 1s;
 }
-
 .container h1 {
   /*This code is **very** tricky, don't touch to it if you don't really know what you're doing.*/
+  /* Really...? */
   text-align: center;
   background-color: var(--accent-color);
   margin: 0;
@@ -163,34 +170,32 @@ header a {
   /*This is important*/
   width:100%;
   left:-20px;
-  
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 7px;
   padding-bottom: 7px;
   border-radius: 10px 10px 0 0;
 }
+.container h2 {
+  text-align: center;
+}
 .container:hover {
   transform: scale(1.02);
   transition-duration: 0.5s;
 }
-.container h2 {
-  text-align: center;
-}
 
-/* Footing styles */
+/* Footer styles */
 footer {
-  position: fixed;
-  bottom: 0px;
-  margin: 0;
-  width: 100%;
-  background-color: none;
-  margin-bottom: 10px;
-  margin-top: 10px;
-  text-align: center;
-}
-footer a {
-  color: var(--foreground-color);
+    background: linear-gradient(to top, var(--background-color) 75%, rgb(0, 0, 0, 0));
+    font-family: var(--font-family);
+    font-weight: var(--font-weight);
+    text-align: center;
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    padding-top: 50px;
+
+    font-size: 0.925em;
 }
 
 /* Alignment */
@@ -203,6 +208,13 @@ footer a {
 .center {
   text-align: center;
 }
+/*.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}*/
 
 /* Link Underlining */
 a:not(.noUnderline) {
@@ -235,7 +247,6 @@ main {
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
 }
-
 @keyframes fadeInAnimation {
   0% {
     opacity: 0;

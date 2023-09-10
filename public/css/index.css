@@ -11,15 +11,26 @@
   }
 }
 #introduction{
-  max-width:450px;
+  width: 100%;
   position:relative;
-  animation-name:intro-animation;
-  animation-timing-function:cubic-bezier(0.7, 0.2, 0.7, 1.4);
-  left:50%;
-  transform:translateX(-50%);
-  animation-duration: 1.6s;
+  /*animation-name:intro-animation;
+  animation-timing-function:cubic-bezier(0.7, 0.2, 0.7, 1.4);*/
+  top: 50%;
+  /*animation-duration: 1.6s;*/
   margin-top:20px;
   margin-bottom:20px;
   line-height:28px;
   font-size:large;
+}
+#introduction *{
+  position:relative;
+  left:50%;
+  transform:translateX(-50%);
+}
+#introduction p{
+  max-width: 450px;
+}
+#heading{
+  max-width:700px;
+  line-height: 120%;
 }

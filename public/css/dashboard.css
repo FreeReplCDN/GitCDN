@@ -5,7 +5,7 @@ h1 {
   position: relative;
   top: 4px;
 }
-inline {
+.inline {
   display: inline;
 }
 .container {
@@ -24,4 +24,8 @@ table img{
 }
 table tr td code{
   margin:16px;
+}
+.filesize {
+  align: right;
+  text-align: right;
 }
