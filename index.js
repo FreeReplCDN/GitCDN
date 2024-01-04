@@ -6,7 +6,7 @@ import { getUserInfo } from "@replit/repl-auth";
 import { listFiles, createRepo } from "./git.mjs";
 import { sql } from "./sql.mjs";
 import * as fs from "fs";
-import { auth } from "./auth.mjs";
+import { generateAuth } from "./auth.mjs";
 
 // Have to do this cause ES6 and stuff
 const __filename = fileURLToPath(import.meta.url);
@@ -90,10 +90,10 @@ app.get("/log", async (req, res) => {
 
 app.get("/logout", async (req, res) => {
   console.log(req.headers, req.cookies, req.signedCookies);
-  res.cookie('REPL_AUTH', '-1', {
-    maxAge: 0, // 1 year
-    //httpOnly: true, // prevents the cookie from being accessed by JavaScript
-    //secure: true // only sent over HTTPS
+  res.cookie('AUTH', '', {
+    maxAge: -1,
+    //httpOnly: true,
+    //secure: true
   });
   res.send("<meta http-equiv='refresh' content='0;/'><p>If the page doesn't automatically redirect, click <a href='/'>here</a>.</p>");
 })

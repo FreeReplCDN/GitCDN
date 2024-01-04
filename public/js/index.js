@@ -1,33 +1,32 @@
 // set up text to print, each item in array is new line
-var aText = [
-"The fastest way to distribute your assets", 
-"Those who understand binary, and those who don't"
+let text = [
+  "share your files",
+  "distribute your assets",
+  "host your code"
 ];
-var iSpeed = 80; // time delay of print out
-var iIndex = 0; // start printing array at this posision
-var iArrLength = aText[0].length; // the length of the text array
-var iScrollAt = 20; // start scrolling up at this many lines
+let destination = document.getElementById("heading");
+let textPos = 0;
+let row = 0;
  
-var iTextPos = 0; // initialise text position
-var sContents = ''; // initialise contents variable
-var iRow; // initialise current row
-var destination = document.getElementById("heading");
- 
-function typewriter(reset)
+function typewriterOld(reset)
 {
- sContents =  ' ';
- iRow = Math.max(0, iIndex-iScrollAt);
+  content =  `The fastest way to ${text[row]}`;
+  destination.innerHTML = content;
  
- while ( iRow < iIndex ) {
-  sContents += aText[iRow++] + '<br />';
- }
- destination.innerHTML = sContents + aText[iIndex].substring(0, iTextPos) + "<span style='background-color:var(--accent-color); width:10px;'></span>";
+ destination.innerHTML = sContents + aText[iIndex].substring(0, textPos) + "<span style='background-color:var(--accent-color); width:10px;'></span>";
  if ( iTextPos++ == iArrLength ) {
   iTextPos = 0;
   iIndex++;
   if ( iIndex != aText.length ) {
    iArrLength = aText[iIndex].length;
-   setTimeout(()=>{destination.innerHTML = ""; console.log(destination); typewriter()}, 2000);
+   setTimeout(()=>{
+    iIndex = 0;
+    iTextPos = 0; // initialise text position
+    sContents = ''; // initialise contents variable
+    iRow = null; // initialise current row
+    destination.innerHTML = "";
+    typewriter();console.log(destination); typewriter()
+   }, 6000);
   }
  } else {
   setTimeout("typewriter()", iSpeed);
@@ -35,4 +34,10 @@ function typewriter(reset)
 }
 
 
-typewriter();
+function typewriter(){
+  content = `The fastest way to ${text[row%text.length]}`;
+}
+
+setTimeout(()=>{
+  typewriter();
+}, 500);

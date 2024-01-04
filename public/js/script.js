@@ -1,8 +1,3 @@
-//Start uploading files button
-document.getElementById("uploadButton").addEventListener("click", () => {
-  window.location.href = "https://gitcdn.repl.co/login";
-});
-
 //Make it mobile friendly
 let openNavBarButton = document.getElementById("linksButton");
 let navBar = document.getElementById("navbar");
