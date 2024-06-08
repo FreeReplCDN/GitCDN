@@ -1,9 +1,9 @@
 import { Octokit } from "octokit";
-const { GITHUB_TOKEN } = process.env;
+const { GH_TOKEN } = process.env;
 
 // Octokit.js
 // https://github.com/octokit/core.js#readme
-const octokit = new Octokit({ auth: GITHUB_TOKEN });
+const octokit = new Octokit({ auth: GH_TOKEN });
 
 console.log("SOF");
 
