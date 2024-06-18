@@ -22,7 +22,7 @@
   line-height:28px;
   font-size:large;
 }
-#introduction *{
+#introduction > *{
   position:relative;
   left:50%;
   transform:translateX(-50%);
@@ -33,4 +33,5 @@
 #heading{
   max-width:700px;
   line-height: 120%;
+  height: 85px;
 }

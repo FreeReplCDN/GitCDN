@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
-
 /* Default styles */
 :root {
   --background-color: white;
@@ -24,234 +22,78 @@
     --ambient-glow-color: #262626;
   }
 }
-body {
+html, body {
   background-color: var(--background-color);
   color: var(--foreground-color);
   font-family: var(--font-family);
-}
-
-/* Links */
-footer a, header a {
-  color: var(--foreground-color);
-}
-
-/* Top navbar */
-header {
-  color: var(--anti-positive-color);
-  display: inline-block;
+  padding: 0;
+  margin: 0;
   width: 100%;
-  padding: 8px;
+}
+a, a:visited {
+  color: var(--foreground-color);
+  text-decoration: none;
+}
+footer a {
+  text-decoration: underline;
+}
+
+/* || Header */
+header:not(.mobile) {
+  position: sticky;
+  top: 0;
   background-color: var(--positive-color);
-  margin: -8px;
   font-size: 25px;
+  padding: 10px;
 }
-header #linksButton {
-  cursor: pointer;
-  display: none;
-  width: 0px;
-  height: 0px;
+header * {
+    display: inline-block;
+    vertical-align: middle;
 }
-header a {
-  display: inline-block;
+header a, header a:visited {
+  color: var(--anti-positive-color); /* Override the foreground-color rule imposed on all links */
   margin: 0 10px;
 }
-.linksContainer,
-.leftLinksContainer {
-  display: inline-block; /* otherwise scrolling would remove it from view */
-  z-index: 0;
-  height: 25px;
-  margin: 0;
-  border: none;
-  background-color: var(--positive-color); /* the shade of yellow */
-  max-width: 80%;
-  padding-left: 8px;
-  padding-right: 15px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+header img { /* Stretch img? (usefulness is questionable) */
+  height: 100%;
 }
-.leftLinksContainer img{
-  height:25px;
-  margin-right:5px;
-  transform:scale(2.2);
-}
-@media only screen and (max-width: 720px) {
-  /* When width is smaller than 720px */
-  header a {
-    display: block;
-  }
-  header #linksButton {
-    cursor: pointer;
-    display: inline;
-    width: 30px;
-    height: 25px;
-    padding: 8px;
-  }
-  .linksContainer {
-    display: none; /*otherwise scrolling would remove it from view */
-    z-index: 2;
-    right: 0;
-    width: 100%;
-    top: 46px;
-    height: calc(100%);
-    margin: 0;
-    border: none;
-    background-color: var(--negative-color); /* positive color?Idk, I did't name it so.*/
-    position: sticky;
-    max-width: 80%;
-    /*padding-left: 8px;
-    padding-right: 15px;
-    padding-top: 10px;
-    padding-bottom: 10px;*/
-  }
-}
-
-/* Buttons */
-.CSSButton {
-  position: relative;
-  outline: none;
-  background-color: var(--accent-color);
-  border: none;
-  color: var(--foreground-color);
-  padding: 10px;
-  border-radius: 5px;
-  font-size: larger;
-  cursor: pointer;
-  transition-duration: 0.5s;
-}
-.CSSButton:hover {
-  transform: translateY(-5%);
-  box-shadow: 0px 0px 8px var(--midground-color);
-  transition-duration: 0.3s;
-}
-.CSSCenteredButton {
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%) translateY(0%);
-  outline: none;
-  background-color: var(--accent-color);
-  color: var(--foreground-color);
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  font-size: larger;
-  cursor: pointer;
-  transition-duration: 0.5s;
-}
-.CSSCenteredButton:hover {
-  transform: translateX(-50%) translateY(-10%);
-  box-shadow: 0px 0px 8px var(--midground-color);
-  transition-duration: 0.3s;
-}
-
-/* Containers */
-.container {
-  /* Box shadow */
-  box-shadow: 0px 0px 8px var(--ambient-glow-color);
-  /*Centering element*/
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  /*NOTE : WIDTH isn't defined here, define it in the style of the page*/
-  max-width: 80%;
-  background-color: var(--mid-background-color);
-  border-radius: 10px;
-  padding: 0px 20px 20px 20px;
-  margin-top: 5%;
-  transition-duration: 1s;
-}
-.container h1 {
-  /*This code is **very** tricky, don't touch to it if you don't really know what you're doing.*/
-  /* Really...? */
-  text-align: center;
-  background-color: var(--accent-color);
-  margin: 0;
-  position: relative;
-  display: block;
-  /*This is important*/
-  width:100%;
-  left:-20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  border-radius: 10px 10px 0 0;
-}
-.container h2 {
-  text-align: center;
-}
-.container:hover {
-  transform: scale(1.02);
-  transition-duration: 0.5s;
-}
-
-/* Footer styles */
-footer {
-    background: linear-gradient(to top, var(--background-color) 75%, rgb(0, 0, 0, 0));
-    font-family: var(--font-family);
-    font-weight: var(--font-weight);
-    text-align: center;
-    position: sticky;
-    bottom: 0;
-    left: 0;
-    padding-top: 50px;
-
-    font-size: 0.925em;
-}
-
-/* Alignment */
-.floatleft {
-  float: left;
-}
-.floatright {
+header nav.floatright { /* Align items designated for the right side */
   float: right;
 }
-.center {
+#menu {
+  cursor: pointer;
+  display: none;
+}
+@media only screen and (max-width: 720px) {
+  #menu {
+    display: inline-block;
+  }
+  nav > *:not(#menu) {
+    display: none;
+  }
+}
+
+/* || Main */
+main {
+  margin: 10px;
   text-align: center;
 }
-/*.vertical-center {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-}*/
 
-/* Link Underlining */
-a:not(.noUnderline) {
-  /* Underline styles - details of technique here: https://nickymeuleman.netlify.app/blog/css-animated-wrapping-underline */
-  cursor: pointer;
-  background: linear-gradient(
-      to right,
-      rgba(100, 200, 200, 1),
-      rgba(100, 200, 200, 1)
-    ),
-    linear-gradient(
-      to right,
-      rgba(255, 0, 0, 1),
-      rgba(255, 0, 180, 1),
-      rgba(0, 100, 200, 1)
-    );
-  background-size: 100% 0.1em, 0 0.1em;
-  background-position: 100% 125%, 0 100%;
-  background-repeat: no-repeat;
-  transition: background-size 400ms;
+/* || Footer */
+/* https://www.freecodecamp.org/news/how-to-keep-your-footer-where-it-belongs-59c6aa05c59c/ */
+body {
+  position: relative;
+  min-height: 100vh;
 }
-a:not(.noUnderline):hover,
-a:not(.noUnderline):focus {
-  background-size: 0 0.1em, 100% 0.1em;
-}
-
-/* Fade in animation */
 main {
-  animation: fadeInAnimation ease 1.5s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
+  padding-bottom: calc(1.5rem + 40px); /* Footer height */
 }
-@keyframes fadeInAnimation {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 1.5rem; /* Footer height */
+  margin: 10px 0;
+  text-align: center;
 }
