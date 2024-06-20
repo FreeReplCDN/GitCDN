@@ -21,7 +21,7 @@
     "express": "^4.19.2",
     "express-rate-limit": "^7.1.0",
     "node-fetch": "^3.2.6",
-    "octokit": "^3.0.0",
+    "octokit": "^3.1.2",
     "postgres": "^3.3.5",
     "webview": "^1.1.0"
   },
